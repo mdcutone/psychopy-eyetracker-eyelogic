@@ -1,6 +1,9 @@
-eyetracker.hw.eyelogic.EyeTracker:
+EyeLogicEyeTracker:
     # Indicates if the device should actually be loaded at experiment runtime.
     enable: True
+
+    # The name displayed in Builder for this eyetracker
+    manufacturer_name: EyeLogic
 
     # The variable name of the device that will be used to access the ioHub Device class
     # during experiment run-time, via the devices.[name] attribute of the ioHub
