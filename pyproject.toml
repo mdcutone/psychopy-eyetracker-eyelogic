@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=40.8.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "psychopy-eyetracker-eyelogic"
+version = "0.0.2"
+description = "Extension package for PsychoPy which adds support for EyeLogic eyetrackers to ioHub."
+readme = "README.md"
+requires-python = ">= 3.7"
+license = {text = "GNU General Public License v3 (GPLv3)"}
+classifiers = [
+  "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: Implementation :: CPython",
+]
+
+dependencies = [
+    "eyelogic-sdk"
+]
+[tool.setuptools.packages.find]
+where = ["", "psychopy_eyetracker_eyelogic",]
+
+[tool.setuptools.package-data]
+"*" = ["*.yaml"]
+
+[project.entry-points."psychopy.iohub.devices.hw.eyetracker.eyelogic"]
+EyeTracker = "psychopy_eyetracker_eyelogic.eyelogic.eyetracker:EyeTracker"
