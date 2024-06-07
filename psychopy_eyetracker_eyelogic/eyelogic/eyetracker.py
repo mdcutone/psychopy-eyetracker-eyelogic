@@ -20,6 +20,7 @@ import inspect
 import traceback
 import typing as T
 import time
+from pathlib import Path
 
 LOG_LEVEL = 0
 
@@ -70,6 +71,8 @@ class EyeTracker(EyeTrackerDevice):
         Attempting to create > 1 instance will raise an exception.
 
     """
+
+    configFile = Path(__file__).parent / "default_eyetracker.yaml"
 
     # Used to hold the EyeTracker subclass instance to ensure only one instance of
     # a given eye tracker type is created. This is a current ioHub limitation, not the limitation of
