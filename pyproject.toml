@@ -31,7 +31,7 @@ where = ["", "psychopy_eyetracker_eyelogic",]
 "*" = ["*.yaml"]
 
 [project.entry-points."psychopy.iohub.devices.eyetracker"]
-EyeLogicEyeTracker = "psychopy_eyetracker_eyelogic.eyelogic.eyetracker:EyeTracker"
+EyeTracker = "psychopy_eyetracker_eyelogic.eyelogic.eyetracker:EyeTracker"
 
 [project.entry-points."psychopy.iohub.devices"]
-EyeLogicEyeTracker = "psychopy_eyetracker_eyelogic.eyelogic.eyetracker:EyeTracker"
+EyeTracker = "psychopy_eyetracker_eyelogic.eyelogic.eyetracker:EyeTracker"
