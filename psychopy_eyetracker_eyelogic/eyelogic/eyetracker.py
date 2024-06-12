@@ -609,7 +609,7 @@ class EyeTracker(EyeTrackerDevice):
                     "Error importing windows api modules. EyeLogic devices can currently only be used on Windows machines.")
 
 
-            class DISPLAY_DEVICEW(ctypes.Structure):
+            class DisplayDeviceW(ctypes.Structure):
                 _fields_ = [
                     ('cb', wintypes.DWORD),
                     ('DeviceName', wintypes.WCHAR * 32),
@@ -625,9 +625,9 @@ class EyeTracker(EyeTrackerDevice):
             displays = []
             i = 0
             while True:
-                INFO = DISPLAY_DEVICEW()
+                INFO = DisplayDeviceW()
                 INFO.cb = ctypes.sizeof(INFO)
-                Monitor_INFO = DISPLAY_DEVICEW()
+                Monitor_INFO = DisplayDeviceW()
                 Monitor_INFO.cb = ctypes.sizeof(Monitor_INFO)
                 if not EnumDisplayDevices(None, i, ctypes.byref(INFO), 0):
                     break
