@@ -12,8 +12,6 @@ from .calibration import EyeLogicCalibrationProcedure
 
 from eyelogic.ELApi import *
 
-from screeninfo import get_monitors, Enumerator
-
 import numpy as np
 import copy
 import inspect
@@ -600,103 +598,6 @@ class EyeTracker(EyeTrackerDevice):
 
         """
 
-        def printPsychopyDisplayInfo(log_level: int):
-            screen_infos = self._display_device._getComputerDisplayRuntimeInfoList()
-            log_local( log_level, message='')
-            log_local( log_level, message='psychopy display info')
-            log_local( log_level, message=str(self._display_device))
-            # if len(screen_infos):
-            #     log_local( log_level, message=str(screen_infos[0]))
-            log_local(log_level, message=str(self._display_device))
-            log_local( log_level, message='active display (index, psychopy name): {:}, {:}'.format(self._display_device.getIndex(),
-                                                                           self._display_device.getPsychopyMonitorName()))
-
-            for info in screen_infos:
-                log_local( log_level, message='')
-                for k, v in info.items():
-                    log_local( log_level, message='{:}: {:}'.format(k, v))
-            log_local( log_level, message='')
-
-        def printEyelogicDisplayInfo(log_level: int):
-            el_screens = self._elapi.getAvailableScreens()
-            log_local( log_level, message='')
-            log_local( log_level, message='eyelogic display info')
-            log_local(log_level, message='displays: {}'.format(len(el_screens)))
-            for el_screen in el_screens:
-                log_local( log_level, message='')
-                log_local( log_level, message='{:8s}: {:}'.format('id', str(el_screen.id)))
-                log_local( log_level, message='{:8s}: {:}'.format('name', str(el_screen.name)))
-                log_local( log_level, message='{:8s}: {:}'.format('local', str(el_screen.localMachine)))
-                log_local( log_level, message='{:8s}: {:}'.format('res X', str(el_screen.resolutionX)))
-                log_local( log_level, message='{:8s}: {:}'.format('res Y', str(el_screen.resolutionY)))
-                log_local( log_level, message='{:8s}: {:}'.format('size X', str(el_screen.physicalSizeX_mm)))
-                log_local( log_level, message='{:8s}: {:}'.format('size Y', str(el_screen.physicalSizeY_mm)))
-            log_local( log_level, message='')
-
-        def printScreenInfo(log_level: int):
-            log_local(log_level, message='screeninfo display info')
-            try:
-                # printMonitors()
-                screen_infos = get_monitors()
-                for info in screen_infos:
-                    log_local(log_level, message=str(info))
-                log_local(log_level, message='')
-            except Exception as e:
-                traceback.print_exc()
-
-        def printWindowsInfo(log_level: int):
-            try:
-                import win32api
-                import win32con
-                import ctypes
-                from ctypes import wintypes
-            except (ModuleNotFoundError, ImportError, NameError):
-                logging.error(
-                    "Error importing windows api modules. EyeLogic devices can currently only be used on Windows machines.")
-
-            class DISPLAY_DEVICEW(ctypes.Structure):
-                _fields_ = [
-                    ('cb', wintypes.DWORD),
-                    ('DeviceName', wintypes.WCHAR * 32),
-                    ('DeviceString', wintypes.WCHAR * 128),
-                    ('StateFlags', wintypes.INT),
-                    ('DeviceID', wintypes.WCHAR * 128),
-                    ('DeviceKey', wintypes.WCHAR * 128)
-                ]
-
-            EnumDisplayDevices = ctypes.windll.user32.EnumDisplayDevicesW
-            EnumDisplayDevices.restype = ctypes.c_bool
-
-            displays = []
-            i = 0
-            while True:
-                INFO = DISPLAY_DEVICEW()
-                INFO.cb = ctypes.sizeof(INFO)
-                Monitor_INFO = DISPLAY_DEVICEW()
-                Monitor_INFO.cb = ctypes.sizeof(Monitor_INFO)
-                if not EnumDisplayDevices(None, i, ctypes.byref(INFO), 0):
-                    break
-                displays.append(INFO)
-                i += 1
-
-            for i, x in enumerate(displays):
-                log_local(log_level, 'Index:        \t{:}'.format(i))
-                log_local(log_level, 'DeviceName:   \t{:}'.format(x.DeviceName))
-                log_local(log_level, "DeviceString: \t{:}".format(x.DeviceString))
-                log_local(log_level, "DeviceID:     \t{:}".format(x.DeviceID))
-                log_local(log_level, "DeviceKey:    \t{:}".format(x.DeviceKey))
-                log_local(log_level, "StateFlags:   \t{:}".format(x.StateFlags))
-                log_local(log_level, "\tAttached:   \t{:}".format(x.StateFlags & win32con.DISPLAY_DEVICE_ATTACHED_TO_DESKTOP > 0))
-                log_local(log_level, "\tMDriver:    \t{:}".format(x.StateFlags & win32con.DISPLAY_DEVICE_MULTI_DRIVER > 0))
-                log_local(log_level, "\tPrimary:    \t{:}".format(x.StateFlags & win32con.DISPLAY_DEVICE_PRIMARY_DEVICE > 0))
-                log_local(log_level, "\tMirroring:  \t{:}".format(x.StateFlags & win32con.DISPLAY_DEVICE_MIRRORING_DRIVER > 0))
-                log_local(log_level, "\tVGA Comp:   \t{:}".format(x.StateFlags & win32con.DISPLAY_DEVICE_VGA_COMPATIBLE > 0))
-                log_local(log_level, "\tRemovable:  \t{:}".format(x.StateFlags & win32con.DISPLAY_DEVICE_REMOVABLE > 0))
-                log_local(log_level, "\tModespruned:\t{:}".format(x.StateFlags & win32con.DISPLAY_DEVICE_MODESPRUNED > 0))
-                log_local(log_level, "\tRemote:     \t{:}".format(x.StateFlags & win32con.DISPLAY_DEVICE_REMOTE > 0))
-                log_local(log_level, "\tDisconnect: \t{:}".format(x.StateFlags & win32con.DISPLAY_DEVICE_DISCONNECT > 0))
-                print()
-
         def mapIndex2WindowsName():
             try:
                 import win32api
@@ -745,10 +646,6 @@ class EyeTracker(EyeTrackerDevice):
             return True
 
         if recording:
-            printPsychopyDisplayInfo(2)
-            printEyelogicDisplayInfo(2)
-            printScreenInfo(2)
-            printWindowsInfo(2)
             displaysMapping = mapIndex2WindowsName()
 
             infront = self._runtime_settings['tracker_infront']
