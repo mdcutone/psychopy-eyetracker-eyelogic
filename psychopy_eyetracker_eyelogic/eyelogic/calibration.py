@@ -8,8 +8,9 @@ from psychopy.iohub.devices import DeviceEvent
 from psychopy.iohub.constants import EventConstants as EC
 from psychopy.iohub.devices.eyetracker.calibration import BaseCalibrationProcedure
 
+from eyelogic.ELApi import *
+
 import threading
-import gevent
 
 class EyeLogicCalibrationProcedure(BaseCalibrationProcedure):
 
