@@ -22,16 +22,15 @@ class EyeLogicCalibrationProcedure(BaseCalibrationProcedure):
 
     def _handleEvent(self, event):
         event_type_index = DeviceEvent.EVENT_TYPE_ID_INDEX
-        if event[event_type_index] == EC.KEYBOARD_RELEASE:
-            if self.calibrationThread is not None:
+        if self.calibrationThread is not None:
+            if event[event_type_index] == EC.KEYBOARD_RELEASE:
                 ek = event[self._keyboard_key_index]
                 if isinstance(ek, bytes):
                     ek = ek.decode('utf-8')
                 if ek == 'escape':
-                    self.calibrationCond.acquire()
-                    self.abort_calibration = True
-                    self.calibrationCond.notify()
-                    self.calibrationCond.release()
+                    self._eyetracker._elapi.setRecordingState(False)
+                    self._eyetracker._elapi.setRecordingState(True)
+                    return
         BaseCalibrationProcedure._handleEvent(self, event)
 
     def runCalibration(self):
@@ -41,30 +40,24 @@ class EyeLogicCalibrationProcedure(BaseCalibrationProcedure):
         if self.showIntroScreen() is False:
             # User pressed escape  to exit calibration
             return False
+        self.window.fullscr = False
+        # self.window.winHandle.set_visible(False)
+        self.window.callOnFlip(self.startCalibrationHook)
         self.clearCalibrationWindow()
-        self.startCalibrationHook()
 
-        self.abort_calibration = False
         self.finishCalibrationHook()
 
-        if self.abort_calibration is False:
+        success = self.calibrationResult == ELApi.ReturnCalibrate.SUCCESS
+        if success:
             self.showFinishedScreen()
             self.clearCalibrationWindow()
             self.clearAllEventBuffers()
-
-        self.window.winHandle.set_fullscreen(False)
-        self.window.winHandle.minimize()
-        self.clearAllEventBuffers()
         self.window.close()
 
-        return not abort_calibration
+        return success
 
     def eyelogicCalibrate(self, mode):
         self.calibrationResult = self._eyetracker._elapi.calibrate(mode)
-        self.calibrationCond.acquire()
-        self.calibrationCond.notify()
-        self.calibrationCond.release()
-
 
     def startCalibrationHook(self):
         if self.calibrationThread is not None:
@@ -91,17 +84,11 @@ class EyeLogicCalibrationProcedure(BaseCalibrationProcedure):
         self.calibrationThread.start()
 
     def finishCalibrationHook(self):
-        self.calibrationCond.acquire()
-        while self.calibrationResult is None or not self.abort_calibration:
-            self.calibrationCond.wait()
-        if self.abort_calibration:
-            self.eyetracker.runSetupProcedure(False)
-            self.eyetracker.runSetupProcedure(True)
-        self.calibrationCond.release()
-
+        # self.window.winHandle.activate()
         self.calibrationThread.join()
         self.calibrationThread = None
-
+        self.window.fullscr = True
+        # self.window.winHandle.set_visible(True)
 
 
 
