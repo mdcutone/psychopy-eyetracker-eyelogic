@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+#
 # -----------------------------------------------------------------------
 # Copyright (C) 2019-2024, EyeLogic GmbH
 #
@@ -18,6 +20,9 @@
 # THE SOFTWARE.
 # -----------------------------------------------------------------------
 
-__all__ = ["eyelogic"]
+__all__ = ["calibration", "eyetracker"]
 __author__ = "EyeLogic GmbH"
 __version__ = "1.1.13"
+
+from .eyetracker import *
+from .calibration import *

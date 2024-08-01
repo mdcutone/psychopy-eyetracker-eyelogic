@@ -1,0 +1,63 @@
+eyetracker.eyelogic.psychopy.eyetracker.EyeTracker: # Indicates if the device should actually be loaded at experiment runtime.
+  enable: True
+
+  # The name displayed in Builder for this eyetracker
+  manufacturer_name: EyeLogic
+
+  # The variable name of the device that will be used to access the ioHub Device class
+  # during experiment run-time, via the devices.[name] attribute of the ioHub
+  # connection or experiment runtime class.
+  name: tracker
+
+  # Should eye tracker events be saved to the ioHub DataStore file when the device
+  # is recording data ?
+  save_events: True
+
+  # Should eye tracker events be sent to the Experiment process when the device
+  # is recording data ?
+  stream_events: True
+
+  # How many eye events (including samples) should be saved in the ioHub event buffer before
+  # old eye events start being replaced by new events. When the event buffer reaches
+  # the maximum event length of the buffer defined here, older events will start to be dropped.
+  event_buffer_length: 1024
+
+  # The EyeLogic implementation of the common eye tracker interface supports the
+  # BinocularEyeSampleEvent event type.
+  monitor_event_types: [ BinocularEyeSampleEvent, ]
+
+  # The below parameter is not used by the EyeLogic eyetracker implementation. It can be left as
+  # is, or filled out for FYI only.
+  model_name: N/A
+
+  # The below parameter is not used by the EyeLogic eyetracker implementation. It can be left as
+  # is, or filled out for FYI only.
+  serial_number: N/A
+
+  calibration:
+    # The EyeLogic ioHub Common Eye Tracker Interface currently supports
+    # 5 and 9 point calibration modes.
+    # FIVE_POINTS, NINE_POINTS
+    #
+    type: FIVE_POINTS
+
+  runtime_settings:
+    # The supported sampling rates for EyeLogic eyetrackers are model dependent.
+    # If the sampling rate specified here is not supported by the model being used,
+    # the EyeLogic device will fail to start. 'default' defaults to sampling mode '0'.
+    # This is typically the fastest available mode.
+    sampling_rate: default
+
+    # EyeLogic device measurement point's position above the stimulus plane in [mm].
+    tracker_infront: 22.0
+    # Position of the EyeLogic device measurement point's projection onto the stimulus plane.
+    # Measured as distance below the bottom edge of the stimulus in [mm].
+    tracker_below: -4.0
+
+    # EyeLogic supports BINOCULAR tracking mode only.
+    track_eyes: BINOCULAR
+
+  # Do not change this value.
+  auto_report_events: False
+
+  device_number: 0
