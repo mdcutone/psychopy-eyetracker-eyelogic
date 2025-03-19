@@ -6,7 +6,7 @@ from psychopy.experiment.components.settings.eyetracking import EyetrackerBacken
 class EyeLogicEyetrackerBackend(EyetrackerBackend):
     """Experiment settings for the EyeLogic eyetrackers.
     """
-    label = 'Eyelogic (iohub)'
+    label = 'EyeLogic (iohub)'
     key = 'eyetracker.eyelogic.EyeTracker'
 
     needsFullscreen = False
@@ -64,7 +64,7 @@ class EyeLogicEyetrackerBackend(EyetrackerBackend):
             'BINOCULAR',
             valType='str',
             inputType='choice',
-            choices=['BINOCULAR',],
+            allowedVals=['BINOCULAR',],
             hint=_translate("The eyes to track."),
             label=_translate("Track eyes"),
             categ="Eyetracking"
